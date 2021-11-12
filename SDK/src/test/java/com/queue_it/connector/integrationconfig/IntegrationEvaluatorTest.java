@@ -3,362 +3,41 @@ package com.queue_it.connector.integrationconfig;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.springframework.http.HttpCookie;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseCookie;
+import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.core.io.Resource;
+import io.netty.buffer.PooledByteBufAllocator;
+import reactor.core.publisher.Flux;
+import static java.util.Collections.singletonMap;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferFactory;
+import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.core.io.buffer.NettyDataBufferFactory;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import java.io.BufferedReader;
 import java.security.Principal;
 import java.util.*;
 
-
-class HttpServletRequestMock implements HttpServletRequest {
-
-    public Cookie[] CookiesValue;
-    public String UserAgent = "";
-    public String RequestURL;
-    public String QueryString;
-    public HashMap<String, String> Headers = new HashMap<>();
-
-    @Override
-    public String getAuthType() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Cookie[] getCookies() {
-        return this.CookiesValue;
-    }
-
-    @Override
-    public long getDateHeader(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getHeader(String key) {
-        if ("User-Agent".equals(key)) {
-            return this.UserAgent;
-        }
-
-        if (this.Headers.containsKey(key)) {
-            return this.Headers.get(key);
-        }
-        return "";
-    }
-
-    @Override
-    public Enumeration<String> getHeaders(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Enumeration<String> getHeaderNames() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public int getIntHeader(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getMethod() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getPathInfo() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getPathTranslated() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getContextPath() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getQueryString() {
-        return this.QueryString;
-    }
-
-    @Override
-    public String getRemoteUser() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isUserInRole(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Principal getUserPrincipal() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getRequestedSessionId() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getRequestURI() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public StringBuffer getRequestURL() {
-        return new StringBuffer(this.RequestURL);
-    }
-
-    @Override
-    public String getServletPath() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public HttpSession getSession(boolean bln) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public HttpSession getSession() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isRequestedSessionIdValid() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isRequestedSessionIdFromCookie() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isRequestedSessionIdFromURL() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isRequestedSessionIdFromUrl() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean authenticate(HttpServletResponse hsr) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void login(String string, String string1) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void logout() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Collection<Part> getParts() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Part getPart(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Object getAttribute(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Enumeration<String> getAttributeNames() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getCharacterEncoding() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setCharacterEncoding(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public int getContentLength() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getContentType() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public ServletInputStream getInputStream() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getParameter(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Enumeration<String> getParameterNames() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String[] getParameterValues(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Map<String, String[]> getParameterMap() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getProtocol() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getScheme() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getServerName() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public int getServerPort() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public BufferedReader getReader() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getRemoteAddr() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getRemoteHost() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setAttribute(String string, Object o) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void removeAttribute(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Locale getLocale() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Enumeration<Locale> getLocales() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isSecure() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public RequestDispatcher getRequestDispatcher(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getRealPath(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public int getRemotePort() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getLocalName() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getLocalAddr() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public int getLocalPort() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public ServletContext getServletContext() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public AsyncContext startAsync() throws IllegalStateException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public AsyncContext startAsync(ServletRequest sr, ServletResponse sr1) throws IllegalStateException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isAsyncStarted() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isAsyncSupported() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public AsyncContext getAsyncContext() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public DispatcherType getDispatcherType() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-}
-
 public class IntegrationEvaluatorTest {
 
+	private static final int BUFFER_SIZE = 64;
+
+	private static final DataBufferFactory bufferFactory = new NettyDataBufferFactory(new PooledByteBufAllocator());
+
+	private MockServerHttpRequest createRequest(Resource resource, String boundary) {
+		Flux<DataBuffer> body = DataBufferUtils
+				.readByteChannel(resource::readableChannel, bufferFactory, BUFFER_SIZE);
+
+		MediaType contentType = new MediaType("multipart", "form-data", singletonMap("boundary", boundary));
+		return MockServerHttpRequest.post("/")
+				.contentType(contentType)
+				.body(body);
+	}
+	
     @Test
     public void GetMatchedIntegrationConfig_OneTrigger_And_NotMatched() throws Exception {
         IntegrationEvaluator testObject = new IntegrationEvaluator();
@@ -396,11 +75,12 @@ public class IntegrationEvaluatorTest {
         customerIntegration.Integrations = integrationConfigModels;
 
         String url = "http://test.tesdomain.com:8080/test?q=2";
+        String urlTemplate="";
+		Object urlValues=null;
+        MockServerHttpRequest requestMock = MockServerHttpRequest.get(urlTemplate,urlValues).build();
+        
 
-        HttpServletRequestMock httpContextMock = new HttpServletRequestMock();
-        httpContextMock.CookiesValue = new Cookie[0];
-
-        IntegrationConfigModel result = testObject.getMatchedIntegrationConfig(customerIntegration, url, httpContextMock);
+        IntegrationConfigModel result = testObject.getMatchedIntegrationConfig(customerIntegration, url, requestMock);
         assertNull(result);
     }
 
@@ -443,12 +123,14 @@ public class IntegrationEvaluatorTest {
         customerIntegration.Integrations = integrationConfigModels;
 
         String url = "http://test.tesdomain.com:8080/test?q=2";
+        String urlTemplate="";
+		Object urlValues=null;
+        MockServerHttpRequest requestMock = MockServerHttpRequest.get(urlTemplate,urlValues).build();
 
-        HttpServletRequestMock httpContextMock = new HttpServletRequestMock();
-        httpContextMock.CookiesValue = new Cookie[1];
-        httpContextMock.CookiesValue[0] = new Cookie("c1", "value1");
+        ResponseCookie cookieC1 = ResponseCookie.from("c1", "value1").build();
+        requestMock.getCookies().add(cookieC1.getName(), cookieC1);
 
-        IntegrationConfigModel result = testObject.getMatchedIntegrationConfig(customerIntegration, url, httpContextMock);
+        IntegrationConfigModel result = testObject.getMatchedIntegrationConfig(customerIntegration, url, requestMock);
         assertEquals("integration1", result.Name);
     }
 
@@ -492,12 +174,13 @@ public class IntegrationEvaluatorTest {
         customerIntegration.Integrations = integrationConfigModels;
 
         String url = "http://test.tesdomain.com:8080/test?q=2";
+        String urlTemplate="";
+		Object urlValues=null;
+        MockServerHttpRequest requestMock = MockServerHttpRequest.get(urlTemplate,urlValues).build();
+        ResponseCookie cookieC2 = ResponseCookie.from("c2", "value1").build();
+        requestMock.getCookies().add(cookieC2.getName(), cookieC2);
 
-        HttpServletRequestMock httpContextMock = new HttpServletRequestMock();
-        httpContextMock.CookiesValue = new Cookie[1];
-        httpContextMock.CookiesValue[0] = new Cookie("c2", "value1");
-
-        IntegrationConfigModel result = testObject.getMatchedIntegrationConfig(customerIntegration, url, httpContextMock);
+        IntegrationConfigModel result = testObject.getMatchedIntegrationConfig(customerIntegration, url, requestMock);
         assertNull(result);
     }
 
@@ -539,12 +222,13 @@ public class IntegrationEvaluatorTest {
         customerIntegration.Integrations = integrationConfigModels;
 
         String url = "http://test.tesdomain.com:8080/test?q=2";
-
-        HttpServletRequestMock httpContextMock = new HttpServletRequestMock();
-        httpContextMock.CookiesValue = new Cookie[1];
-        httpContextMock.CookiesValue[0] = new Cookie("c1", "value1");
-
-        IntegrationConfigModel result = testObject.getMatchedIntegrationConfig(customerIntegration, url, httpContextMock);
+        String urlTemplate="";
+		Object urlValues=null;
+        MockServerHttpRequest requestMock = MockServerHttpRequest.get(urlTemplate,urlValues).build();
+        ResponseCookie cookieC1 = ResponseCookie.from("c1", "value1").build();
+        requestMock.getCookies().add(cookieC1.getName(), cookieC1);
+        
+        IntegrationConfigModel result = testObject.getMatchedIntegrationConfig(customerIntegration, url, requestMock);
         assertEquals("integration1", result.Name);
     }
 
@@ -593,11 +277,12 @@ public class IntegrationEvaluatorTest {
         customerIntegration.Integrations = integrationConfigModels;
 
         String url = "http://test.tesdomain.com:8080/test?q=2";
+        String urlTemplate="";
+		Object urlValues=null;
+        MockServerHttpRequest requestMock = MockServerHttpRequest.get(urlTemplate,urlValues).build();
+        
 
-        HttpServletRequestMock httpContextMock = new HttpServletRequestMock();
-        httpContextMock.CookiesValue = new Cookie[0];
-
-        IntegrationConfigModel result = testObject.getMatchedIntegrationConfig(customerIntegration, url, httpContextMock);
+        IntegrationConfigModel result = testObject.getMatchedIntegrationConfig(customerIntegration, url, requestMock);
         assertEquals("integration1", result.Name);
     }
 
@@ -646,11 +331,12 @@ public class IntegrationEvaluatorTest {
         customerIntegration.Integrations = integrationConfigModels;
 
         String url = "http://test.tesdomain.com:8080/test?q=2";
+        String urlTemplate="";
+		Object urlValues=null;
+        MockServerHttpRequest requestMock = MockServerHttpRequest.get(urlTemplate,urlValues).build();
+        
 
-        HttpServletRequestMock httpContextMock = new HttpServletRequestMock();
-        httpContextMock.CookiesValue = new Cookie[0];
-
-        IntegrationConfigModel result = testObject.getMatchedIntegrationConfig(customerIntegration, url, httpContextMock);
+        IntegrationConfigModel result = testObject.getMatchedIntegrationConfig(customerIntegration, url, requestMock);
         assertNull(result);
     }
 
@@ -727,12 +413,13 @@ public class IntegrationEvaluatorTest {
         customerIntegration.Integrations = integrationConfigModels;
 
         String url = "http://test.tesdomain.com:8080/test?q=2";
+        String urlTemplate="";
+		Object urlValues=null;
+        MockServerHttpRequest requestMock = MockServerHttpRequest.get(urlTemplate,urlValues).build();
+        ResponseCookie cookieC1 = ResponseCookie.from("c1", "Value1").build();
+        requestMock.getCookies().add(cookieC1.getName(), cookieC1);
 
-        HttpServletRequestMock httpContextMock = new HttpServletRequestMock();
-        httpContextMock.CookiesValue = new Cookie[1];
-        httpContextMock.CookiesValue[0] = new Cookie("c1", "Value1");
-
-        IntegrationConfigModel result = testObject.getMatchedIntegrationConfig(customerIntegration, url, httpContextMock);
+        IntegrationConfigModel result = testObject.getMatchedIntegrationConfig(customerIntegration, url, requestMock);
         assertEquals("integration1", result.Name);
     }
 
@@ -783,13 +470,14 @@ public class IntegrationEvaluatorTest {
         customerIntegration.Integrations = integrationConfigModels;
 
         String url = "http://test.tesdomain.com:8080/test?q=2";
+        String urlTemplate="";
+		Object urlValues=null;
+        MockServerHttpRequest requestMock = MockServerHttpRequest.get(urlTemplate,urlValues).build();
+        ResponseCookie cookieC1 = ResponseCookie.from("c1", "value1").build();
+        requestMock.getCookies().add(cookieC1.getName(), cookieC1);
+        //requestMock.UserAgent = "Googlebot";
 
-        HttpServletRequestMock httpContextMock = new HttpServletRequestMock();
-        httpContextMock.CookiesValue = new Cookie[1];
-        httpContextMock.CookiesValue[0] = new Cookie("c1", "value1");
-        httpContextMock.UserAgent = "Googlebot";
-
-        IntegrationConfigModel result = testObject.getMatchedIntegrationConfig(customerIntegration, url, httpContextMock);
+        IntegrationConfigModel result = testObject.getMatchedIntegrationConfig(customerIntegration, url, requestMock);
         assertNull(result);
     }
 }

@@ -3,15 +3,26 @@ package com.queue_it.connector.integrationconfig;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpCookie;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.util.MultiValueMap;
+
+//import javax.servlet.http.Cookie;
+//import javax.servlet.http.HttpServletRequest;
 
 interface IIntegrationEvaluator {
 
     IntegrationConfigModel getMatchedIntegrationConfig(
             CustomerIntegration customerIntegration,
             String currentPageUrl,
-            HttpServletRequest request) throws Exception;
+            ServerHttpRequest request) throws Exception;
 }
 
 public class IntegrationEvaluator implements IIntegrationEvaluator {
@@ -20,7 +31,7 @@ public class IntegrationEvaluator implements IIntegrationEvaluator {
     public IntegrationConfigModel getMatchedIntegrationConfig(
             CustomerIntegration customerIntegration,
             String currentPageUrl,
-            HttpServletRequest request) throws Exception {
+            ServerHttpRequest request) throws Exception {
 
         if (request == null) {
             throw new Exception("request is null");
@@ -39,7 +50,7 @@ public class IntegrationEvaluator implements IIntegrationEvaluator {
     private boolean evaluateTrigger(
             TriggerModel trigger,
             String currentPageUrl,
-            HttpServletRequest request) {
+            ServerHttpRequest request) {
         if (trigger.LogicalOperator.equals(LogicalOperatorType.OR)) {
             for (TriggerPart part : trigger.TriggerParts) {
                 if (evaluateTriggerPart(part, currentPageUrl, request)) {
@@ -57,13 +68,13 @@ public class IntegrationEvaluator implements IIntegrationEvaluator {
         }
     }
 
-    private boolean evaluateTriggerPart(TriggerPart triggerPart, String currentPageUrl, HttpServletRequest request) {
+    private boolean evaluateTriggerPart(TriggerPart triggerPart, String currentPageUrl, ServerHttpRequest request) {
         if (ValidatorType.URL_VALIDATOR.equals(triggerPart.ValidatorType)) {
             return UrlValidatorHelper.evaluate(triggerPart, currentPageUrl);
         } else if (ValidatorType.COOKIE_VALIDATOR.equals(triggerPart.ValidatorType)) {
             return CookieValidatorHelper.evaluate(triggerPart, request.getCookies());
         } else if (ValidatorType.USERAGENT_VALIDATOR.equals(triggerPart.ValidatorType)) {
-            return UserAgentValidatorHelper.evaluate(triggerPart, request.getHeader("User-Agent"));
+            return UserAgentValidatorHelper.evaluate(triggerPart, request.getHeaders().getFirst("User-Agent"));
         } else if (ValidatorType.HTTPHEADER_VALIDATOR.equals(triggerPart.ValidatorType)) {
             return HttpHeaderValidatorHelper.evaluate(triggerPart, request);
         } else {
@@ -107,26 +118,21 @@ final class UrlValidatorHelper {
 
 final class CookieValidatorHelper {
 
-    public static boolean evaluate(TriggerPart triggerPart, Cookie[] cookieCollection) {
-        return ComparisonOperatorHelper.evaluate(triggerPart.Operator,
+    public static boolean evaluate(TriggerPart triggerPart, MultiValueMap<String,HttpCookie> cookieMultiValueMap) {
+        return ComparisonOperatorHelper.evaluate(
+        		triggerPart.Operator,
                 triggerPart.IsNegative,
                 triggerPart.IsIgnoreCase,
-                getCookie(triggerPart.CookieName, cookieCollection),
+                getCookie(triggerPart.CookieName, cookieMultiValueMap),
                 triggerPart.ValueToCompare,
                 triggerPart.ValuesToCompare);
     }
 
-    private static String getCookie(String cookieName, Cookie[] cookieCollection) {
-        if (cookieCollection == null) {
-            return "";
+    private static List<HttpCookie> getCookie(String cookieName, MultiValueMap<String,HttpCookie> cookieMultiValueMap) {
+        if (cookieMultiValueMap == null) {
+            return null;
         }
-
-        for (Cookie cookie : cookieCollection) {
-            if (cookie.getName().equals(cookieName)) {
-                return cookie.getValue();
-            }
-        }
-        return "";
+        return cookieMultiValueMap.get(cookieName);
     }
 }
 
@@ -144,11 +150,11 @@ final class UserAgentValidatorHelper {
 
 final class HttpHeaderValidatorHelper {
 
-    public static boolean evaluate(TriggerPart triggerPart, HttpServletRequest request) {
+    public static boolean evaluate(TriggerPart triggerPart, ServerHttpRequest request) {
         return ComparisonOperatorHelper.evaluate(triggerPart.Operator,
                 triggerPart.IsNegative,
                 triggerPart.IsIgnoreCase,
-                request.getHeader(triggerPart.HttpHeaderName),
+                request.getHeaders().getFirst(triggerPart.HttpHeaderName),
                 triggerPart.ValueToCompare,
                 triggerPart.ValuesToCompare);
     }
@@ -156,6 +162,21 @@ final class HttpHeaderValidatorHelper {
 
 final class ComparisonOperatorHelper {
 
+    public static boolean evaluate(
+            String opt,
+            boolean isNegative,
+            boolean isIgnoreCase,
+            List<HttpCookie> listCookies,
+            String valueToCompare,
+            String[] valuesToCompare) {
+    	if (listCookies == null)
+    	{
+    		return false;
+    	}
+    	return listCookies.stream().map(
+    			cookie -> evaluate(opt,isNegative,isIgnoreCase,cookie.getValue(),valueToCompare,valuesToCompare)).anyMatch(b -> b==true);
+    }
+    
     public static boolean evaluate(
             String opt,
             boolean isNegative,

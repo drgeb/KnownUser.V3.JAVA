@@ -16,8 +16,8 @@ public class UserInQueueStateCookieRepositoryTest {
         String queueId = "528f01d4-30f9-4753-95b3-2c8c33966abc";
         String cookieKey = UserInQueueStateCookieRepository.getCookieKey(eventId);
         int cookieValidity = 10;
-        final HashMap<String, HashMap<String, Object>> cookies = new HashMap<>();
-        cookies.put(cookieKey, new HashMap<>());
+        final HashMap<String, HashMap<String, Object>> cookies = new HashMap<String, HashMap<String, Object>>();
+        cookies.put(cookieKey, new HashMap<String, Object>());
 
         ICookieManager cookieManager = new ICookieManager() {
 
@@ -57,7 +57,7 @@ public class UserInQueueStateCookieRepositoryTest {
         String queueId = "528f01d4-30f9-4753-95b3-2c8c33966abc";
         String cookieKey = UserInQueueStateCookieRepository.getCookieKey(eventId);
         int cookieValidity = 10;
-        final HashMap<String, String> cookies = new HashMap<>();
+        final HashMap<String, String> cookies = new HashMap<String, String>();
 
         ICookieManager cookieManager = new ICookieManager() {
 
@@ -91,7 +91,7 @@ public class UserInQueueStateCookieRepositoryTest {
         String secretKey = "4e1db821-a825-49da-acd0-5d376f2068db";
         String cookieDomain = ".test.com";
         String queueId = "528f01d4-30f9-4753-95b3-2c8c33966abc";
-        final HashMap<String, String> cookies = new HashMap<>();
+        final HashMap<String, String> cookies = new HashMap<String, String>();
 
         ICookieManager cookieManager = new ICookieManager() {
 
@@ -118,7 +118,7 @@ public class UserInQueueStateCookieRepositoryTest {
         String secretKey = "4e1db821-a825-49da-acd0-5d376f2068db";
         String cookieDomain = ".test.com";
         String queueId = "528f01d4-30f9-4753-95b3-2c8c33966abc";
-        final HashMap<String, String> cookies = new HashMap<>();
+        final HashMap<String, String> cookies = new HashMap<String, String>();
 
         ICookieManager cookieManager = new ICookieManager() {
 
@@ -146,7 +146,7 @@ public class UserInQueueStateCookieRepositoryTest {
         String cookieDomain = ".test.com";
         String queueId = "528f01d4-30f9-4753-95b3-2c8c33966abc";
 
-        final HashMap<String, String> cookies = new HashMap<>();
+        final HashMap<String, String> cookies = new HashMap<String, String>();
 
         ICookieManager cookieManager = new ICookieManager() {
 
@@ -202,9 +202,9 @@ public class UserInQueueStateCookieRepositoryTest {
         String cookieDomain = "testDomain";
 
         String cookieKey = UserInQueueStateCookieRepository.getCookieKey(eventId);
-        final HashMap<String, HashMap<String, Object>> cookies = new HashMap<>();
-        cookies.put(cookieKey + "1", new HashMap<>());
-        cookies.put(cookieKey + "2", new HashMap<>());
+        final HashMap<String, HashMap<String, Object>> cookies = new HashMap<String, HashMap<String, Object>>();
+        cookies.put(cookieKey + "1", new HashMap<String, Object>());
+        cookies.put(cookieKey + "2", new HashMap<String, Object>());
 
         ICookieManager cookieManager = new ICookieManager() {
 
@@ -243,7 +243,7 @@ public class UserInQueueStateCookieRepositoryTest {
         String eventId = "event1";
         String secretKey = "secretKey";
         String queueId = "528f01d4-30f9-4753-95b3-2c8c33966abc";
-        final HashMap<String, Object> cookie = new HashMap<>();
+        final HashMap<String, Object> cookie = new HashMap<String, Object>();
 
         long issueTime = (System.currentTimeMillis() / 1000L - 120);
         String hash = HashHelper.generateSHA256Hash(secretKey, eventId + queueId + "3" + "idle" + issueTime);
@@ -292,7 +292,7 @@ public class UserInQueueStateCookieRepositoryTest {
 
         String eventId = "event1";
         String secretKey = "secretKey";
-        final HashMap<String, Boolean> conditions = new HashMap<>();
+        final HashMap<String, Boolean> conditions = new HashMap<String, Boolean>();
         conditions.put("isSetCookieCalled", false);
 
         ICookieManager cookieManager = new ICookieManager() {

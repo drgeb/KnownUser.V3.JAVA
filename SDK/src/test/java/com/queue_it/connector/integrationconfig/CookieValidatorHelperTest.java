@@ -3,8 +3,10 @@ package com.queue_it.connector.integrationconfig;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-
-import javax.servlet.http.Cookie;
+import org.springframework.http.HttpCookie;
+import org.springframework.http.ResponseCookie;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 public class CookieValidatorHelperTest {
 
@@ -15,27 +17,30 @@ public class CookieValidatorHelperTest {
         triggerPart.Operator = ComparisonOperatorType.CONTAINS;
         triggerPart.ValueToCompare = "1";
 
-        Cookie[] cookieCollection = null;
-        assertFalse(CookieValidatorHelper.evaluate(triggerPart, cookieCollection));
+        MultiValueMap<String,HttpCookie> cookieMultiValueMap =null;
+        assertFalse(CookieValidatorHelper.evaluate(triggerPart, cookieMultiValueMap));
 
-        cookieCollection = new Cookie[3];
-        cookieCollection[0] = new Cookie("c5", "5");
-        cookieCollection[1] = new Cookie("c1", "1");
-        cookieCollection[2] = new Cookie("c2", "test");
-        assertTrue(CookieValidatorHelper.evaluate(triggerPart, cookieCollection));
+        cookieMultiValueMap = new LinkedMultiValueMap<>();
+        HttpCookie cookieC5 = ResponseCookie.from("c5", "5").build();
+        cookieMultiValueMap.add(cookieC5.getName(), cookieC5);
+        HttpCookie cookieC1 = ResponseCookie.from("c1", "1").build();
+        cookieMultiValueMap.add(cookieC1.getName(), cookieC1);
+        HttpCookie cookieC2 = ResponseCookie.from("c2", "test").build();
+        cookieMultiValueMap.add(cookieC2.getName(), cookieC2);
+        assertTrue(CookieValidatorHelper.evaluate(triggerPart, cookieMultiValueMap));
 
         triggerPart.ValueToCompare = "5";
-        assertFalse(CookieValidatorHelper.evaluate(triggerPart, cookieCollection));
+        assertFalse(CookieValidatorHelper.evaluate(triggerPart, cookieMultiValueMap));
 
         triggerPart.ValueToCompare = "Test";
         triggerPart.IsIgnoreCase = true;
         triggerPart.CookieName = "c2";
-        assertTrue(CookieValidatorHelper.evaluate(triggerPart, cookieCollection));
+        assertTrue(CookieValidatorHelper.evaluate(triggerPart, cookieMultiValueMap));
 
         triggerPart.ValueToCompare = "Test";
         triggerPart.IsIgnoreCase = true;
         triggerPart.IsNegative = true;
         triggerPart.CookieName = "c2";
-        assertFalse(CookieValidatorHelper.evaluate(triggerPart, cookieCollection));
+        assertFalse(CookieValidatorHelper.evaluate(triggerPart, cookieMultiValueMap));
     }
 }

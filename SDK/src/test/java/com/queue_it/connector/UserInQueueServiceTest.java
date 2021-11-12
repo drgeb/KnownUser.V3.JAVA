@@ -26,7 +26,7 @@ public class UserInQueueServiceTest {
         config.setExtendCookieValidity(false);
         config.setActionName("QueueAction");
 
-        final HashMap<String, Boolean> conditions = new HashMap<>();
+        final HashMap<String, Boolean> conditions = new HashMap<String, Boolean>();
         conditions.put("isStoreWasCalled", false);
 
         IUserInQueueStateRepository cookieProviderMock = new IUserInQueueStateRepository() {
@@ -76,14 +76,14 @@ public class UserInQueueServiceTest {
         config.setExtendCookieValidity(true);
         config.setCookieDomain(".testdomain.com");
         config.setActionName("QueueAction");
-        final HashMap<String, HashMap<String, Object>> callInfo = new HashMap<>();
-        callInfo.put("firstCall", new HashMap<>());
+        final HashMap<String, HashMap<String, Object>> callInfo = new HashMap<String, HashMap<String, Object>>();
+        callInfo.put("firstCall", new HashMap<String, Object>());
         IUserInQueueStateRepository cookieProviderMock = new IUserInQueueStateRepository() {
 
             @Override
             public void store(String eventId, String queueId, Integer fixedCookieValidityMinutes, String cookieDomain,
                               String redirectType, String customerSecretKey) {
-                HashMap<String, Object> info = new HashMap<>();
+                HashMap<String, Object> info = new HashMap<String, Object>();
                 info.put("eventId", eventId);
                 info.put("fixedCookieValidityMinutes", fixedCookieValidityMinutes);
                 info.put("redirectType", redirectType);
@@ -135,7 +135,7 @@ public class UserInQueueServiceTest {
         config.setExtendCookieValidity(true);
         config.setActionName("QueueAction");
 
-        final HashMap<String, Boolean> conditions = new HashMap<>();
+        final HashMap<String, Boolean> conditions = new HashMap<String, Boolean>();
         conditions.put("isStoreWasCalled", false);
 
         IUserInQueueStateRepository cookieProviderMock = new IUserInQueueStateRepository() {
@@ -185,7 +185,7 @@ public class UserInQueueServiceTest {
         config.setActionName("QueueAction");
         config.setCookieDomain("TestDomain");
 
-        final HashMap<String, Boolean> conditions = new HashMap<>();
+        final HashMap<String, Boolean> conditions = new HashMap<String, Boolean>();
         conditions.put("isStoreWasCalled", false);
 
         IUserInQueueStateRepository cookieProviderMock = new IUserInQueueStateRepository() {
@@ -257,7 +257,7 @@ public class UserInQueueServiceTest {
         config.setCookieDomain("testDomain");
         String customerKey = "4e1db821-a825-49da-acd0-5d376f2068db";
 
-        final HashMap<String, Boolean> conditions = new HashMap<>();
+        final HashMap<String, Boolean> conditions = new HashMap<String, Boolean>();
         conditions.put("isStoreWasCalled", false);
 
         IUserInQueueStateRepository cookieProviderMock = new IUserInQueueStateRepository() {
@@ -329,7 +329,7 @@ public class UserInQueueServiceTest {
         config.setCookieDomain("testDomain");
         String customerKey = "4e1db821-a825-49da-acd0-5d376f2068db";
 
-        final HashMap<String, Boolean> conditions = new HashMap<>();
+        final HashMap<String, Boolean> conditions = new HashMap<String, Boolean>();
         conditions.put("isStoreWasCalled", false);
 
         IUserInQueueStateRepository cookieProviderMock = new IUserInQueueStateRepository() {
@@ -399,14 +399,14 @@ public class UserInQueueServiceTest {
         config.setActionName("QueueAction");
         String customerKey = "4e1db821-a825-49da-acd0-5d376f2068db";
 
-        final HashMap<String, HashMap<String, Object>> callInfo = new HashMap<>();
-        callInfo.put("firstCall", new HashMap<>());
+        final HashMap<String, HashMap<String, Object>> callInfo = new HashMap<String, HashMap<String, Object>>();
+        callInfo.put("firstCall", new HashMap<String, Object>());
         IUserInQueueStateRepository cookieProviderMock = new IUserInQueueStateRepository() {
 
             @Override
             public void store(String eventId, String queueId, Integer fixedCookieValidityMinutes, String cookieDomain,
                               String redirectType, String customerSecretKey) {
-                HashMap<String, Object> info = new HashMap<>();
+                HashMap<String, Object> info = new HashMap<String, Object>();
                 info.put("eventId", eventId);
                 info.put("fixedCookieValidityMinutes", fixedCookieValidityMinutes);
                 info.put("cookieDomain", cookieDomain);
@@ -423,7 +423,7 @@ public class UserInQueueServiceTest {
 
             @Override
             public void cancelQueueCookie(String eventId, String cookieDomain) {
-                HashMap<String, Object> obj = new HashMap<>();
+                HashMap<String, Object> obj = new HashMap<String, Object>();
                 obj.put("eventId", eventId);
                 obj.put("cookieDomain", cookieDomain);
                 callInfo.put("cancelQueueCookieWasCalled", obj);
@@ -466,14 +466,14 @@ public class UserInQueueServiceTest {
         config.setCookieDomain("testDomain");
         String customerKey = "secretekeyofuser";
 
-        final HashMap<String, HashMap<String, Object>> callInfo = new HashMap<>();
-        callInfo.put("firstCall", new HashMap<>());
+        final HashMap<String, HashMap<String, Object>> callInfo = new HashMap<String, HashMap<String, Object>>();
+        callInfo.put("firstCall", new HashMap<String, Object>());
         IUserInQueueStateRepository cookieProviderMock = new IUserInQueueStateRepository() {
 
             @Override
             public void store(String eventId, String queueId, Integer fixedCookieValidityMinutes, String cookieDomain,
                               String redirectType, String customerSecretKey) {
-                HashMap<String, Object> info = new HashMap<>();
+                HashMap<String, Object> info = new HashMap<String, Object>();
                 info.put("eventId", eventId);
                 info.put("fixedCookieValidityMinutes", fixedCookieValidityMinutes);
                 info.put("cookieDomain", cookieDomain);
@@ -490,7 +490,7 @@ public class UserInQueueServiceTest {
 
             @Override
             public void cancelQueueCookie(String eventId, String cookieDomain) {
-                HashMap<String, Object> obj = new HashMap<>();
+                HashMap<String, Object> obj = new HashMap<String, Object>();
                 obj.put("eventId", eventId);
                 obj.put("cookieDomain", cookieDomain);
                 callInfo.put("cancelQueueCookieWasCalled", obj);
@@ -531,7 +531,7 @@ public class UserInQueueServiceTest {
         config.setActionName("QueueAction");
         config.setQueueDomain("testDomain.com");
 
-        final HashMap<String, Boolean> conditions = new HashMap<>();
+        final HashMap<String, Boolean> conditions = new HashMap<String, Boolean>();
         conditions.put("isStoreWasCalled", false);
 
         IUserInQueueStateRepository cookieProviderMock = new IUserInQueueStateRepository() {
@@ -588,7 +588,7 @@ public class UserInQueueServiceTest {
         config.setActionName("QueueAction");
         config.setCookieDomain("testDomain");
 
-        final HashMap<String, Boolean> conditions = new HashMap<>();
+        final HashMap<String, Boolean> conditions = new HashMap<String, Boolean>();
         conditions.put("isStoreWasCalled", false);
 
         IUserInQueueStateRepository cookieProviderMock = new IUserInQueueStateRepository() {
@@ -643,7 +643,7 @@ public class UserInQueueServiceTest {
         config.setActionName("QueueAction");
         config.setCookieDomain("testDomain");
 
-        final HashMap<String, Boolean> conditions = new HashMap<>();
+        final HashMap<String, Boolean> conditions = new HashMap<String, Boolean>();
         conditions.put("isStoreWasCalled", false);
 
         IUserInQueueStateRepository cookieProviderMock = new IUserInQueueStateRepository() {
@@ -698,7 +698,7 @@ public class UserInQueueServiceTest {
         config.setActionName("QueueAction");
         config.setCookieDomain("testDomain");
 
-        final HashMap<String, Boolean> conditions = new HashMap<>();
+        final HashMap<String, Boolean> conditions = new HashMap<String, Boolean>();
         conditions.put("isStoreWasCalled", false);
 
         IUserInQueueStateRepository cookieProviderMock = new IUserInQueueStateRepository() {
@@ -754,7 +754,7 @@ public class UserInQueueServiceTest {
         config.setActionName("QueueAction");
         config.setCookieDomain("testDomain");
 
-        final HashMap<String, Boolean> conditions = new HashMap<>();
+        final HashMap<String, Boolean> conditions = new HashMap<String, Boolean>();
         conditions.put("isStoreWasCalled", false);
 
         IUserInQueueStateRepository cookieProviderMock = new IUserInQueueStateRepository() {
@@ -807,7 +807,7 @@ public class UserInQueueServiceTest {
         config.setVersion(10);
         config.setActionName("Queue Action (._~-) &!*|'\"");
 
-        final HashMap<String, String> conditions = new HashMap<>();
+        final HashMap<String, String> conditions = new HashMap<String, String>();
 
         IUserInQueueStateRepository cookieProviderMock = new IUserInQueueStateRepository() {
 
@@ -872,7 +872,7 @@ public class UserInQueueServiceTest {
         public static String generateToken(Date timeStamp, String eventId, boolean extendableCookie,
                                            Integer cookieValidityMinute, String secretKey, String redirectType) {
 
-            ArrayList<String> paramList = new ArrayList<>();
+            ArrayList<String> paramList = new ArrayList<String>();
 
             paramList.add(QueueParameterHelper.TimeStampKey + QueueParameterHelper.KeyValueSeparatorChar
                     + GetUnixTimestamp(timeStamp));
