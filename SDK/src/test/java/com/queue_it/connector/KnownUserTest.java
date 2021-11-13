@@ -2,33 +2,22 @@ package com.queue_it.connector;
 
 import static org.junit.Assert.*;
 
-import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.net.URLDecoder;
-import java.security.Principal;
+import java.io.UnsupportedEncodingException;
+import java.net.InetSocketAddress;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Map.Entry;
 
-import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
 import org.springframework.mock.http.server.reactive.MockServerHttpResponse;
-import org.springframework.util.MultiValueMap;
 import org.junit.Test;
 
-import com.queue_it.connector.integrationconfig.CustomerIntegration;
-import com.queue_it.connector.integrationconfig.IntegrationConfigModel;
-import com.queue_it.connector.integrationconfig.TriggerModel;
-import com.queue_it.connector.integrationconfig.TriggerPart;
 
 public class KnownUserTest {
 
@@ -169,13 +158,14 @@ public class KnownUserTest {
         String requestURL = "requestUrl";
         String remoteAddr = "80.35.35.34";
         
-        headers.add("via", "1.1 example.com");
+        headers.add("via", encodeValue("1.1 example.com"));//TODO Not sure if this should be encoded but its causing an error, not able to figure out if String should be encoded or not as set
         headers.add("forwarded", "for=192.0.2.60;proto=http;by=203.0.113.43");
         headers.add("x-forwarded-for", "129.78.138.66, 129.78.64.103");
         headers.add("x-forwarded-host", "en.wikipedia.org:8080");
         headers.add("x-forwarded-proto", "https");
-        
-		MockServerHttpRequest requestMock = MockServerHttpRequest.get(requestURL).headers(headers).build();
+   
+        InetSocketAddress remoteAddress=new InetSocketAddress(remoteAddr,8080);
+		MockServerHttpRequest requestMock = MockServerHttpRequest.get(requestURL).remoteAddress(remoteAddress).headers(headers).build();
         MockServerHttpResponse responseMock = new MockServerHttpResponse();
 
         // Act
@@ -212,6 +202,10 @@ public class KnownUserTest {
         assertTrue(decodedCookieValue.contains("&ActionName:cancelAction"));
     }
 
+    private String encodeValue(String value) throws UnsupportedEncodingException {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
+    }
+    
     public static Date addDays(Date date, int days) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);

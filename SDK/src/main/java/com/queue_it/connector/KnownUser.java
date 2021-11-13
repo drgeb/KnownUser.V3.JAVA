@@ -2,7 +2,6 @@ package com.queue_it.connector;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -18,7 +17,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseCookie.ResponseCookieBuilder;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
-import org.springframework.lang.Nullable;
 import org.springframework.util.MultiValueMap;
 
 // import javax.servlet.http.Cookie;
@@ -448,11 +446,14 @@ class CookieManager implements ICookieManager {
 		if (cookieValue == null) {
 			cookieValue = "";
 		}
-		//TODO not able to set max age domain and path
-		Duration duration=null;
 		ResponseCookieBuilder builder = ResponseCookie.from(cookieName,cookieValue);
 		builder.domain(cookieDomain);
-		builder.maxAge(duration);
+		if (expiration != null) {
+			//TODO expiration is in seconds
+			//TODO not able to set max age domain and path
+			Duration duration=Duration.ofSeconds(expiration);
+			builder.maxAge(duration);
+		}
 		builder.path("/");
 		ResponseCookie rCookie = builder.build();
 		response.addCookie(rCookie);

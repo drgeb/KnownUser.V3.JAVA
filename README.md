@@ -1,4 +1,4 @@
-# Queue-it KnownUser SDK for Java 
+# Queue-it KnownUser SDK for Spring Web Reactive
 Before getting started please read the [documentation](https://github.com/queueit/Documentation/tree/main/serverside-connectors) to get acquainted with server-side connectors.
 
 This connector supports Java 6 (and above) from v.3.5.2. Older versions require at least Java 8.
